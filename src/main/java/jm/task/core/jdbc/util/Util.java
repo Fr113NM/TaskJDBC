@@ -8,7 +8,7 @@ public class Util {
     private static final String USER = "root";
     private static final String PASSWORD = "root";
 
-    private Connection connection;
+    private static Connection connection;
 
     public Util() {
 
@@ -21,7 +21,7 @@ public class Util {
         }
     }
 
-    public Connection getConnection() {
+    public static Connection getConnection() {
         return connection;
     }
 }

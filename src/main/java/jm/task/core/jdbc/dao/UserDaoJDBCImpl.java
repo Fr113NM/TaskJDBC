@@ -25,11 +25,11 @@ public class UserDaoJDBCImpl implements UserDao {
                 "age MEDIUMINT," +
                 "PRIMARY KEY(id) )";
 
-        try {
-            Statement statement = myConnection.createStatement();
+        try (Statement statement = myConnection.createStatement()) {
+
             statement.execute(queryCreateTable);
             System.out.println("Создана таблица " + tableName);
-            statement.close();
+            // statement.close();
         } catch (SQLException ex) {
             System.out.println("Не удалось создать таблицу " + tableName);
             ex.printStackTrace();
@@ -38,11 +38,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void dropUsersTable() {
         String deleteQuery = "DROP TABLE IF EXISTS " + tableName;
-        try {
-            Statement statement = myConnection.createStatement();
+        try (Statement statement = myConnection.createStatement()) {
+
             statement.execute(deleteQuery);
             System.out.println("Удалена таблица " + tableName);
-            statement.close();
+            // statement.close();
         } catch (SQLException ex) {
             System.out.println("Не удалось удалить таблицу " + tableName);
             ex.printStackTrace();
@@ -53,15 +53,15 @@ public class UserDaoJDBCImpl implements UserDao {
 
         String addUserQuery = "INSERT INTO " + tableName + "(name, lastname, age) values (?,?,?)";
 
-        try {
-            PreparedStatement preparedStatement = myConnection.prepareStatement(addUserQuery);
+        try (PreparedStatement preparedStatement = myConnection.prepareStatement(addUserQuery)) {
+
             preparedStatement.setString(1, aName);
             preparedStatement.setString(2, aLastName);
             preparedStatement.setInt(3, aAge);
             preparedStatement.executeUpdate();
 
             System.out.println("User с именем " + aName + " добавлен в базу данных");
-            preparedStatement.close();
+            // preparedStatement.close();
         } catch (SQLException ex) {
             System.out.println("Не удалось добавить в БД нового User " + aName);
             ex.printStackTrace();
@@ -71,11 +71,11 @@ public class UserDaoJDBCImpl implements UserDao {
     public void removeUserById(long id) {
         String removeQuery = "DELETE FROM " + tableName +
                 " WHERE id = " + id;
-        try {
-            Statement statement = myConnection.createStatement();
+        try (Statement statement = myConnection.createStatement()) {
+
             statement.execute(removeQuery);
             System.out.println("User с id " + id + " удален из базы данных");
-            statement.close();
+            // statement.close();
         } catch (SQLException ex) {
             System.out.println("Не удалось удалить из БД User с id " + id);
             ex.printStackTrace();
@@ -85,8 +85,8 @@ public class UserDaoJDBCImpl implements UserDao {
     public List<User> getAllUsers() {
         String query = "SELECT * FROM " + tableName;
         List<User> usersList = new ArrayList<>();
-        try {
-            Statement statement = myConnection.createStatement();
+        try (Statement statement = myConnection.createStatement()) {
+
             ResultSet resultSet = statement.executeQuery(query);
             while (resultSet.next()) {
                 User user = new User();
@@ -98,7 +98,7 @@ public class UserDaoJDBCImpl implements UserDao {
                 System.out.println(user);
                 usersList.add(user);
             }
-            statement.close();
+            // statement.close();
         } catch (SQLException ex) {
             System.out.println("Не удалось создать List <User> from " + tableName);
             ex.printStackTrace();
@@ -108,11 +108,11 @@ public class UserDaoJDBCImpl implements UserDao {
 
     public void cleanUsersTable() {
         String cleanQuery = "TRUNCATE TABLE " + tableName;
-        try {
-            Statement statement = myConnection.createStatement();
+        try (Statement statement = myConnection.createStatement()) {
+
             statement.execute(cleanQuery);
             System.out.println("Очищена таблица " + tableName);
-            statement.close();
+            // statement.close();
         } catch (SQLException ex) {
             System.out.println("Не удалось найти таблицу " + tableName);
             ex.printStackTrace();
